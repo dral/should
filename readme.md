@@ -1,8 +1,14 @@
 # should
 
-This is a simple functional style library for test assertions.
+This is a simple functional style library for testing assertions.
 
 ## How to use
+
+### Add to your project using Ant/Maven/Gradle/...
+
+- group: `com.github.dral`
+- name: `test-should`
+- version: `0.1.0`
 
 ### Import
 ```
@@ -44,6 +50,7 @@ Or satisfying a given condition:
 
 > Informally:
 > `some piece of code` should throw something satisfying `a given condition`.
+
 ```
 shouldThrow(
 	() -> { throw new RuntimeException("Message"); },	// some piece of code
