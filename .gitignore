@@ -1,0 +1,18 @@
+# Mac OS X Desktop Services Store
+.DS_Store
+
+# Eclipse project files
+.classpath
+.project
+.settings
+.externalToolBuilders
+bin
+
+# Gradle & build output
+.gradle
+build
+
+# Gradle wrapper
+gradle/
+gradle/wrapper/*
+gradlew*
