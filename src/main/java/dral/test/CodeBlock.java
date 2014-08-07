@@ -12,7 +12,7 @@ public interface CodeBlock {
 		return () -> { run(); after.run(); };
 	}
 	
-	default Throwable getThrows(){
+	default Throwable catchError(){
 		try {
 			run();
 		} catch (Throwable e) {
