@@ -1,9 +1,13 @@
 package dral.test;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.BooleanSupplier;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Should {
 
@@ -36,6 +40,22 @@ public class Should {
 	}
 	
 	public static void shouldThrow(CodeBlock code, Predicate<? super Throwable> errorTest){
-		should(code.getThrows(), PredicateUtils.and(Objects::nonNull, errorTest));
+		should(code.catchError(), PredicateUtils.and(Objects::nonNull, errorTest));
+	}
+
+	public static <T> void shouldAll(Stream<T> input, Predicate<? super T> test){
+		Function<T, CodeBlock> check = x -> (() -> should(x, test));
+		Function<T, Throwable> getError = x -> check.apply(x).catchError();
+
+		List<String> errors = input.parallel()
+				.map(getError)
+				.filter(Objects::nonNull)
+				.limit(100) // limits only the number of errors.
+				.map(e -> e.getMessage())
+				.collect(Collectors.toList());
+
+		if (!errors.isEmpty()){
+			throw new AssertionError(); // TODO Construct error message from inner errors.
+		}
 	}
 }
