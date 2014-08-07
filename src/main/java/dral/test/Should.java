@@ -41,7 +41,7 @@ public class Should {
 	}
 	
 	public static void shouldThrow(CodeBlock code, Predicate<? super Throwable> errorTest){
-		should(code.getThrows(), PredicateUtils.and(Objects::nonNull, errorTest));
+		should(code.catchError(), PredicateUtils.and(Objects::nonNull, errorTest));
 	}
 
 	public static <T> void should(Supplier<T> supplier, Predicate<? super T> test){
@@ -51,7 +51,7 @@ public class Should {
 
 	public static <T> void shouldAll(Stream<T> input, Predicate<? super T> test){
 		Function<T, CodeBlock> check = x -> (() -> should(x, test));
-		Function<T, Throwable> getError = x -> check.apply(x).getThrows();
+		Function<T, Throwable> getError = x -> check.apply(x).catchError();
 
 		List<String> errors = input.parallel()
 				.map(getError)
