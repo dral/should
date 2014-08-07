@@ -6,7 +6,6 @@ import java.util.function.BiPredicate;
 import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,11 +43,6 @@ public class Should {
 		should(code.catchError(), PredicateUtils.and(Objects::nonNull, errorTest));
 	}
 
-	public static <T> void should(Supplier<T> supplier, Predicate<? super T> test){
-		Objects.requireNonNull(supplier);
-		should(supplier.get(), test);
-	}
-
 	public static <T> void shouldAll(Stream<T> input, Predicate<? super T> test){
 		Function<T, CodeBlock> check = x -> (() -> should(x, test));
 		Function<T, Throwable> getError = x -> check.apply(x).catchError();
@@ -61,7 +55,7 @@ public class Should {
 				.collect(Collectors.toList());
 
 		if (!errors.isEmpty()){
-			throw new AssertionError();
+			throw new AssertionError(); // TODO Construct error message from inner errors.
 		}
 	}
 }
